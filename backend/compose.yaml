@@ -1,0 +1,11 @@
+# Base de développement, démarrée automatiquement par `./mvnw spring-boot:run`
+# grâce au support Docker Compose de Spring Boot.
+services:
+  postgres:
+    image: 'postgres:17-alpine'
+    environment:
+      - 'POSTGRES_DB=creneau'
+      - 'POSTGRES_USER=creneau'
+      - 'POSTGRES_PASSWORD=creneau'
+    ports:
+      - '5432'

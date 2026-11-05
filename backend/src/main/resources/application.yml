@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: creneau-api
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  docker:
+    compose:
+      lifecycle-management: start-only
+
+app:
+  zone: Europe/Paris
+  demo-data: true
+  booking:
+    opening-hour: 8
+    closing-hour: 20
+    slot-minutes: 15
+    min-duration: 15m
+    max-duration: 4h
+    max-advance: 60d
+    open-days: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
+  jwt:
+    issuer: creneau
+    ttl: 8h
+    # Clé de développement uniquement. En production, fournir JWT_SECRET (base64, 256 bits minimum).
+    secret: ${JWT_SECRET:ZGV2LW9ubHktc2VjcmV0LWNyZW5lYXUtY2hhbmdlLW1lLWluLXByb2R1Y3Rpb24hIQ==}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
