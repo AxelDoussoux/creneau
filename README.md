@@ -1,6 +1,18 @@
 # Créneau
 
+[![CI](https://github.com/AxelDoussoux/creneau/actions/workflows/ci.yml/badge.svg)](https://github.com/AxelDoussoux/creneau/actions/workflows/ci.yml)
+[![Démo](https://github.com/AxelDoussoux/creneau/actions/workflows/pages.yml/badge.svg)](https://axeldoussoux.github.io/creneau/)
+![Java 21](https://img.shields.io/badge/Java-21-b07219)
+![Spring Boot 4.1](https://img.shields.io/badge/Spring%20Boot-4.1-6db33f)
+![Angular 21](https://img.shields.io/badge/Angular-21-dd0031)
+![PostgreSQL 17](https://img.shields.io/badge/PostgreSQL-17-336791)
+[![Licence MIT](https://img.shields.io/badge/licence-MIT-blue)](LICENSE)
+
 Application web de réservation de salles de réunion : on cherche une salle libre selon l'horaire, le nombre de participants et l'équipement, puis on la réserve en deux clics. Les administrateurs gèrent le parc de salles et voient le planning global.
+
+> **[Essayer la démo en ligne →](https://axeldoussoux.github.io/creneau/)**
+> Connexion : `admin@creneau.dev` / `admin1234`, ou `lea@creneau.dev` / `demo1234`.
+> Sur GitHub Pages, l'API Spring Boot est remplacée par une version simulée dans le navigateur, avec les mêmes règles ([détails](docs/ARCHITECTURE.md#la-démo-github-pages)).
 
 **Stack** : Java 21 · Spring Boot 4.1 (Web MVC, Data JPA, Security, OAuth2 Resource Server, Validation, Actuator) · PostgreSQL 17 · Flyway · Angular 21 (standalone, signals, zoneless) · Testcontainers · Docker.
 
@@ -20,6 +32,17 @@ creneau/
 ├── frontend/           SPA Angular
 └── docker-compose.yml  stack complète (PostgreSQL + API + nginx)
 ```
+
+## Architecture
+
+```mermaid
+flowchart LR
+    U([Navigateur]) --> W[nginx<br/>SPA Angular]
+    W -- "/api/*" --> A[API Spring Boot<br/>JWT · règles métier]
+    A -- JPA / Flyway --> D[(PostgreSQL 17<br/>contrainte d'exclusion)]
+```
+
+Le détail des modules, du cycle d'une réservation et de la démo statique est dans [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Fonctionnalités
 
@@ -110,6 +133,8 @@ cd frontend && npm test -- --watch=false
 - **`BookingApiTests`** : l'API de bout en bout sur un vrai PostgreSQL. Couvre la sécurité par rôle, la recherche de disponibilités, les conflits, les erreurs normalisées, les droits d'annulation et la concurrence.
 - **`time.spec.ts`** : les conversions de fuseau horaire du front, heure d'été comprise.
 
+La [CI GitHub Actions](.github/workflows/ci.yml) lance ces tests à chaque push (Testcontainers y démarre PostgreSQL), vérifie le formatage du front et construit les images Docker. Dependabot propose les mises à jour chaque mois.
+
 ## API
 
 | Méthode | Route | Rôle |
@@ -125,3 +150,7 @@ cd frontend && npm test -- --watch=false
 | `GET` | `/api/admin/bookings?from=&to=` | admin |
 
 La documentation interactive complète est servie par Swagger UI.
+
+## Licence
+
+[MIT](LICENSE) © Axel Doussoux

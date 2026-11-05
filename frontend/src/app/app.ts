@@ -3,12 +3,29 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { filter } from 'rxjs';
 import { ApiService } from './core/api.service';
 import { AuthService } from './core/auth.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
     <a class="skip" href="#contenu">Aller au contenu</a>
+    @if (demo) {
+      <div class="demo-banner" role="note">
+        <div class="container demo-inner">
+          <p>
+            <strong>Démo en ligne</strong> — l'API Spring Boot est simulée dans votre navigateur,
+            avec les mêmes règles. Vos réservations restent sur cet appareil.
+          </p>
+          <span class="demo-actions">
+            <a href="https://github.com/AxelDoussoux/creneau" target="_blank" rel="noopener">
+              Code source
+            </a>
+            <button type="button" (click)="resetDemo()">Réinitialiser</button>
+          </span>
+        </div>
+      </div>
+    }
     @if (auth.user(); as user) {
       <header class="bar">
         <div class="container bar-inner">
@@ -53,6 +70,38 @@ import { AuthService } from './core/auth.service';
     </main>
   `,
   styles: `
+    .demo-banner {
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 0.85rem;
+      p {
+        margin: 0;
+      }
+      a,
+      button {
+        color: inherit;
+        font: inherit;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        background: none;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+      }
+    }
+    .demo-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px 20px;
+      padding-block: 8px;
+    }
+    .demo-actions {
+      display: flex;
+      gap: 16px;
+      white-space: nowrap;
+    }
     .skip {
       position: absolute;
       left: 16px;
@@ -186,6 +235,7 @@ export class App {
   protected readonly auth = inject(AuthService);
   private readonly api = inject(ApiService);
   protected readonly menuOpen = signal(false);
+  protected readonly demo = environment.demo;
 
   constructor() {
     inject(Router)
@@ -197,5 +247,15 @@ export class App {
         this.api.loadRules().subscribe({ error: () => undefined });
       }
     });
+  }
+
+  protected resetDemo(): void {
+    try {
+      localStorage.removeItem('creneau.demo.db');
+      localStorage.removeItem('creneau.session');
+    } catch {
+      // Stockage indisponible : rien à effacer.
+    }
+    location.assign(document.baseURI);
   }
 }

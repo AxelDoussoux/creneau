@@ -6,6 +6,7 @@ import localeFr from '@angular/common/locales/fr';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth.interceptor';
+import { demoInterceptors } from './demo/demo-interceptors';
 
 registerLocaleData(localeFr);
 
@@ -17,7 +18,7 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
     ),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, ...demoInterceptors])),
     { provide: LOCALE_ID, useValue: 'fr-FR' },
   ],
 };
