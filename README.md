@@ -4,6 +4,16 @@ Application web de réservation de salles de réunion : on cherche une salle lib
 
 **Stack** : Java 21 · Spring Boot 4.1 (Web MVC, Data JPA, Security, OAuth2 Resource Server, Validation, Actuator) · PostgreSQL 17 · Flyway · Angular 21 (standalone, signals, zoneless) · Testcontainers · Docker.
 
+![Planning d'une salle et formulaire de réservation](docs/screenshots/room.png)
+
+| Recherche de salles libres | Planning global (admin) |
+| --- | --- |
+| ![Recherche](docs/screenshots/search.png) | ![Planning admin](docs/screenshots/admin.png) |
+
+| Connexion | Mobile |
+| --- | --- |
+| ![Connexion](docs/screenshots/login.png) | <img src="docs/screenshots/mobile.png" alt="Réservation sur mobile" width="260"> |
+
 ```
 creneau/
 ├── backend/            API REST Spring Boot

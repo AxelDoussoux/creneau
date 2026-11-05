@@ -34,6 +34,7 @@ const HOUR_HEIGHT = 56;
             <li
               class="slot"
               [class.mine]="slot.mine"
+              [class.short]="slot.height < 30"
               [style.top.px]="slot.top"
               [style.height.px]="slot.height"
               (click)="$event.stopPropagation()"
@@ -116,6 +117,17 @@ const HOUR_HEIGHT = 56;
       }
       .who {
         color: var(--ink-3);
+      }
+      /* Réunion de 15 min : une seule ligne centrée, sans l'organisateur. */
+      &.short {
+        flex-wrap: nowrap;
+        align-items: center;
+        padding-block: 0;
+        font-size: 0.75rem;
+        line-height: 1;
+        .who {
+          display: none;
+        }
       }
       &.mine {
         background: var(--ink);
